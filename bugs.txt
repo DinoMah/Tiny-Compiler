@@ -1,2 +1,3 @@
 - Si borras las declaraciones de variables se detiene el programa en el analizador semantico
 X Al ejecutar otra vez el analisis el archivo de assemblies no se borra lo anterior (Agregaba nuevo texto como append)
+- No tiene opción de guardar como ... (jajaja lo borre al crear el nuevo menú :v)
