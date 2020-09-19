@@ -12,5 +12,5 @@ You can find the gems on RubyGems.org and install them (including posible depend
 <b>Running the project:</b>
   - Locate 'ide.rb' file for running the little ide and execute in the command line 'ruby ide.rb'<br>
   
-Examples can be found in the testing folder (Open sintacticamente_correcto.txt file to run the compiler, press the play button. If you make changes just click the save button and run).
+Examples can be found in the testing folder (<b>Open sintacticamente_correcto.txt file to run the compiler, press the play button. If you make changes just click the save button and run</b>).
 <br>Data is stored in plain .txt files so you can easily see whats happening in the compilation process
