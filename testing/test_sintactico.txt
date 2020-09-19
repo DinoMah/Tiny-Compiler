@@ -1,0 +1,14 @@
+main {
+    integer a, b, c;
+    bool x, y, z;
+    float l, m, n;
+    do {
+        a--;
+        while true {
+            x := 2+4*2;
+            read loca
+            write;
+        }
+        jajajajaja
+    } until (3 > 1);
+}

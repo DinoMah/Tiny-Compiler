@@ -1,0 +1,321 @@
+palabra reservada-> main
+llave abre-> {
+palabra reservada-> integer
+id-> x
+coma-> ,
+id-> y
+coma-> ,
+id-> z
+punto y coma-> ;
+palabra reservada-> float
+id-> a
+coma-> ,
+id-> b
+coma-> ,
+id-> c
+punto y coma-> ;
+palabra reservada-> bool
+id-> m
+coma-> ,
+id-> n
+punto y coma-> ;
+palabra reservada-> integer
+id-> d
+punto y coma-> ;
+id-> x
+asignacion-> :=
+num entero-> 1
+suma-> +
+num entero-> 2
+suma-> +
+num entero-> 3
+suma-> +
+num entero-> 4
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Value of x: 
+coma-> ,
+id-> x
+punto y coma-> ;
+palabra reservada-> read
+id-> x
+punto y coma-> ;
+palabra reservada-> read
+id-> m
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Hello bitch
+coma-> ,
+num entero-> 3
+multiplicacion-> *
+num entero-> 2
+suma-> +
+num entero-> 3
+div-> /
+num entero-> 4
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Lolo
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Nice
+coma-> ,
+num entero-> 3
+punto y coma-> ;
+id-> d
+asignacion-> :=
+num entero-> 1
+resta-> -
+num entero-> 2
+punto y coma-> ;
+id-> m
+asignacion-> :=
+num entero-> 9
+mayor-> >
+num entero-> 4
+punto y coma-> ;
+id-> n
+asignacion-> :=
+num entero-> 8
+com_dif-> !=
+num entero-> 7
+punto y coma-> ;
+id-> n
+asignacion-> :=
+num entero-> 7
+may_igual-> >=
+num entero-> 8
+punto y coma-> ;
+id-> c
+asignacion-> :=
+num real-> 9.0
+punto y coma-> ;
+id-> x
+asignacion-> :=
+num entero-> 15
+punto y coma-> ;
+id-> y
+asignacion-> :=
+id-> x
+suma-> +
+num entero-> 3
+suma-> +
+id-> y
+resta-> -
+id-> y
+multiplicacion-> *
+id-> y
+punto y coma-> ;
+id-> d
+asignacion-> :=
+num entero-> 34
+residuo-> %
+num entero-> 5
+punto y coma-> ;
+palabra reservada-> if
+paretesis abre-> (
+num entero-> 42
+parentesis cierra-> )
+palabra reservada-> then
+llave abre-> {
+id-> y
+asignacion-> :=
+num entero-> 3
+punto y coma-> ;
+llave cierra-> }
+palabra reservada-> else
+llave abre-> {
+palabra reservada-> if
+paretesis abre-> (
+num entero-> 4
+mayor-> >
+num entero-> 2
+parentesis cierra-> )
+palabra reservada-> then
+llave abre-> {
+palabra reservada-> if
+paretesis abre-> (
+num entero-> 100
+mayor-> >
+num entero-> 2
+parentesis cierra-> )
+palabra reservada-> then
+llave abre-> {
+id-> a
+asignacion-> :=
+num entero-> 1
+punto y coma-> ;
+llave cierra-> }
+llave cierra-> }
+palabra reservada-> else
+llave abre-> {
+id-> b
+asignacion-> :=
+num real-> 5.0
+punto y coma-> ;
+palabra reservada-> read
+id-> m
+punto y coma-> ;
+llave cierra-> }
+id-> y
+asignacion-> :=
+id-> y
+suma-> +
+num entero-> 1
+punto y coma-> ;
+llave cierra-> }
+id-> a
+inc-> ++
+punto y coma-> ;
+id-> c
+dec-> --
+punto y coma-> ;
+id-> x
+asignacion-> :=
+num entero-> 3
+suma-> +
+num entero-> 4
+punto y coma-> ;
+palabra reservada-> do
+llave abre-> {
+id-> y
+asignacion-> :=
+paretesis abre-> (
+id-> y
+suma-> +
+num entero-> 1
+parentesis cierra-> )
+multiplicacion-> *
+num entero-> 2
+suma-> +
+num entero-> 1
+punto y coma-> ;
+id-> x
+asignacion-> :=
+num entero-> 1
+punto y coma-> ;
+id-> z
+asignacion-> :=
+num entero-> 2
+punto y coma-> ;
+palabra reservada-> if
+paretesis abre-> (
+num entero-> 2
+parentesis cierra-> )
+palabra reservada-> then
+llave abre-> {
+id-> a
+asignacion-> :=
+num real-> 1.0
+punto y coma-> ;
+llave cierra-> }
+palabra reservada-> else
+llave abre-> {
+id-> b
+asignacion-> :=
+num real-> 2.0
+punto y coma-> ;
+llave cierra-> }
+palabra reservada-> while
+paretesis abre-> (
+id-> d
+parentesis cierra-> )
+llave abre-> {
+id-> x
+asignacion-> :=
+num entero-> 6
+suma-> +
+num entero-> 8
+div-> /
+num entero-> 9
+multiplicacion-> *
+num entero-> 8
+div-> /
+num entero-> 3
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Mi texto 1
+coma-> ,
+id-> x
+punto y coma-> ;
+llave cierra-> }
+llave cierra-> }
+palabra reservada-> until
+paretesis abre-> (
+id-> y
+com_igual-> ==
+num entero-> 5
+parentesis cierra-> )
+punto y coma-> ;
+palabra reservada-> while
+paretesis abre-> (
+num entero-> 3
+menor-> <
+num entero-> 6
+parentesis cierra-> )
+llave abre-> {
+palabra reservada-> read
+id-> b
+punto y coma-> ;
+id-> y
+asignacion-> :=
+num entero-> 4
+multiplicacion-> *
+num entero-> 3
+resta-> -
+num entero-> 8
+suma-> +
+num entero-> 1
+residuo-> %
+num entero-> 2
+punto y coma-> ;
+llave cierra-> }
+palabra reservada-> while
+paretesis abre-> (
+id-> y
+com_igual-> ==
+num entero-> 0
+parentesis cierra-> )
+llave abre-> {
+palabra reservada-> write
+cadena-> Mi texto 2
+coma-> ,
+num real-> 35.5
+punto y coma-> ;
+palabra reservada-> write
+cadena-> Mi texto 3
+coma-> ,
+num entero-> 8
+residuo-> %
+num entero-> 2
+suma-> +
+num entero-> 5
+punto y coma-> ;
+palabra reservada-> while
+paretesis abre-> (
+num entero-> 4
+parentesis cierra-> )
+llave abre-> {
+id-> z
+asignacion-> :=
+num entero-> 8
+multiplicacion-> *
+num entero-> 2
+punto y coma-> ;
+palabra reservada-> while
+paretesis abre-> (
+num entero-> 4
+com_dif-> !=
+num entero-> 8
+parentesis cierra-> )
+llave abre-> {
+id-> x
+asignacion-> :=
+id-> x
+resta-> -
+num entero-> 1
+punto y coma-> ;
+llave cierra-> }
+llave cierra-> }
+llave cierra-> }
+llave cierra-> }

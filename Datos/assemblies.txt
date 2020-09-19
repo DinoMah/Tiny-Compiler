@@ -1,0 +1,225 @@
+lda x
+ldc 1
+ldc 2
+adi
+ldc 3
+adi
+ldc 4
+adi
+stn
+lds Value of x:
+lod x
+wri
+lda  x
+rdi
+lda  m
+rdi
+lds Hello bitch
+ldc 3
+ldc 2
+mul
+ldc 3
+ldc 4
+div
+adi
+wri
+lds Lolo
+wri
+lds Nice
+ldc 3
+wri
+lda d
+ldc 1
+ldc 2
+sub
+stn
+lda m
+ldc 9
+ldc 4
+gtn
+stn
+lda n
+ldc 8
+ldc 7
+dif
+stn
+lda n
+ldc 7
+ldc 8
+gte
+stn
+lda c
+ldc 9.0
+stn
+lda x
+ldc 15
+stn
+lda y
+lod x
+ldc 3
+adi
+lod y
+adi
+lod y
+lod y
+mul
+sub
+stn
+lda d
+ldc 34
+ldc 5
+res
+stn
+ldc 42
+fjp L1
+lda y
+ldc 3
+stn
+ujp L2
+lab L1
+ldc 4
+ldc 2
+gtn
+fjp L3
+ldc 100
+ldc 2
+gtn
+fjp L4
+lda a
+ldc 1
+stn
+lab L4
+ujp L5
+lab L3
+lda b
+ldc 5.0
+stn
+lab L5
+lab L2
+lda a
+lod a
+ldc 1
+adi
+stn
+lda c
+lod c
+ldc 1
+sub
+stn
+lda x
+ldc 3
+ldc 4
+adi
+stn
+lab L6
+lda y
+lod y
+ldc 1
+adi
+ldc 2
+mul
+ldc 1
+adi
+stn
+lda x
+ldc 1
+stn
+lda z
+ldc 2
+stn
+ldc 2
+fjp L7
+lda a
+ldc 1.0
+stn
+ujp L8
+lab L7
+lda b
+ldc 2.0
+stn
+lab L8
+lab L9
+lod d
+fjp L10
+lda x
+ldc 6
+ldc 8
+ldc 9
+div
+ldc 8
+mul
+ldc 3
+div
+adi
+stn
+lds Mi texto 1
+lod x
+wri
+ujp L9
+lab L10
+lod y
+ldc 5
+equ
+fjp L11
+ujp L6
+lab L11
+lab L12
+ldc 3
+ldc 6
+ltn
+fjp L13
+lda  b
+rdi
+lda y
+ldc 4
+ldc 3
+mul
+ldc 8
+sub
+ldc 1
+ldc 2
+res
+adi
+stn
+ujp L12
+lab L13
+lab L14
+lod y
+ldc 0
+equ
+fjp L15
+lds Mi texto 2
+ldc 35.5
+wri
+lds Mi texto 3
+ldc 8
+ldc 2
+res
+ldc 5
+adi
+wri
+lab L16
+ldc 4
+fjp L17
+lda z
+ldc 8
+ldc 2
+mul
+stn
+lab L18
+ldc 4
+ldc 8
+dif
+fjp L19
+lda x
+lod x
+ldc 1
+sub
+stn
+ujp L18
+lab L19
+ujp L16
+lab L17
+ujp L14
+lab L15
+stp
