@@ -1,3 +1,8 @@
+lda a
+ldc 8
+ldc 0
+div
+stn
 lda x
 ldc 1
 ldc 2
@@ -14,7 +19,7 @@ lda  x
 rdi
 lda  m
 rdi
-lds Hello bitch
+lds Hello bae
 ldc 3
 ldc 2
 mul

@@ -22,6 +22,12 @@ punto y coma-> ;
 palabra reservada-> integer
 id-> d
 punto y coma-> ;
+id-> a
+asignacion-> :=
+num entero-> 8
+div-> /
+num entero-> 0
+punto y coma-> ;
 id-> x
 asignacion-> :=
 num entero-> 1
@@ -44,7 +50,7 @@ palabra reservada-> read
 id-> m
 punto y coma-> ;
 palabra reservada-> write
-cadena-> Hello bitch
+cadena-> Hello bae
 coma-> ,
 num entero-> 3
 multiplicacion-> *

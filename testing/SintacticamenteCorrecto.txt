@@ -3,11 +3,12 @@ main{
 	float a, b, c;
 	bool m,n;
 	integer d;
+	a := 8 / 0;
 	x := 1+2+3+4;
 	write "Value of x: ", x;
 	read x;
 	read m;
-	write "Hello bitch", 3*2+3/4;
+	write "Hello bae", 3*2+3/4;
 	write "Lolo";
 	write "Nice", 3;
 	d := 1 - 2;

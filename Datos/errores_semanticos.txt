@@ -1,0 +1,4 @@
+ERROR EN LA OPERACIÓN 8  / 0 
+ERROR, no se puede asignar el valor a la variable a
+ERROR EN LA OPERACIÓN a  + 1 
+ERROR, no se puede asignar el valor a la variable a

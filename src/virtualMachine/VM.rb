@@ -6,7 +6,10 @@ include Fox
 class VirtualMachine
     public def init
         @assemblies.each do
-            self.readInstruction
+            error = self.readInstruction
+            if error != nil
+                self.showMessage 'X Error X', error
+            end
         end
     end
 
@@ -37,9 +40,12 @@ class VirtualMachine
             instruction = Array.new
             File.foreach 'Datos/assemblies.txt' do |line|
                 instruction = line.split ' '
+                # Se comprueba si el comando tiene algún valor, por ejemplo ldc 1: ldc sería el comando y 1 sería el valor
                 if instruction.length <= 2
                     @assemblies[pos] = Instruction.new instruction[0], instruction[1]
                 else
+                    # Puede suceder que haya una cadena para el comando write con espacios por ejemplo write "Hola que tal" y las tres palabras de la cadena
+                    # se deben de concatenar en una
                     string = ''
                     for i in 1...instruction.length
                         string += instruction[i] + ' '
@@ -57,12 +63,7 @@ class VirtualMachine
         return @assemblies[currentInstruction].command
     end
 
-    def getValue currentInstruction
-        return @assemblies[currentInstruction].value
-    end
-
     def readInstruction
-        puts @assemblies[@currentInstruction].command + ' ' + @assemblies[@currentInstruction].value.to_s
         error = nil
         case self.getCommand @currentInstruction
         when @instruction[0]
@@ -139,20 +140,22 @@ class VirtualMachine
 
     def div
         pair = self.getFromQueue
-        if pair[1] == 0
+        if pair[1] == '0'
             return 'Error: Can\'t process division by 0.'
         end
         result = self.getNum(pair[0]) / self.getNum(pair[1])
         self.saveOnQueue result
+        return nil
     end
 
     def res
         pair = self.getFromQueue
-        if pair[1] == 0
+        if pair[1] == '0'
             return 'Error: Can\'t process division by 0.'
         end
         result = self.getNum(pair[0]) % self.getNum(pair[1])
         self.saveOnQueue result
+        return nil
     end
 
     def lda
@@ -250,12 +253,12 @@ class VirtualMachine
         end
     end
 
-    def showMessage(messageType, message)
+    def showMessage(messageType, message) # Se utiliza solo para marcar una incompatibilidad del dato con el input
         FXMessageBox.warning @ideInstance, MBOX_OK, messageType, message
     end
     
     def wri
-        # Enviar informacion al texto del ide
+        # Enviar informacion a una ventana emergente en el ide.
         pair = self.getFromQueue
         if !(pair[0].instance_of? String)
             self.saveOnQueue pair[0]
@@ -285,7 +288,9 @@ class VirtualMachine
     
     def fjp
         comparisonResult = @queue.pop
-        if comparisonResult.is_a? String
+        if comparisonResult.is_a? String # esto se usa en caso de que una condición sea sólo un número por ejemplo if(42) then ...
+            # Hace la cadena un valor falso para posteriormente hacerlo verdadero
+            # Recordar que es un salto a etiqueta en caso de ser falso
             comparisonResult = !comparisonResult
         end
         if !comparisonResult
@@ -308,6 +313,8 @@ class VirtualMachine
     end
 
     def getFromQueue
+        # Las operaciones normalmente se realizan entre dos elementos por ejemplo 2 + 1, en este caso el operador + usa dos elementos 2 y 1.
+        # Si se usa un solo elemento se inidica solo como @queue.pop
         return @queue.pop(2)
     end
 
@@ -315,7 +322,7 @@ class VirtualMachine
         @queue.push value
     end
 
-    def saveValueOnQueue
+    def saveValueOnQueue # Puede guardar un valor, una cadena o una dirección (aka nombre de la variable)
         self.saveOnQueue @assemblies[@currentInstruction].value
     end
 
