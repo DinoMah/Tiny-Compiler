@@ -10,7 +10,7 @@ class CodeGenerator
         self.numOfLabels = 0
     end
 
-    public def genCode(treeNode)
+    public def genCode(treeNode) # Generates code for the operation, puede recorrer el nodo en inorden, postorden, dependiendo del tipo de nodo
         if treeNode != nil
             case treeNode.content.token
             when 'palabra reservada'
@@ -32,7 +32,7 @@ class CodeGenerator
     end
 
     private
-    def onReservedWord(treeNode)
+    def onReservedWord(treeNode) # Does the code for the reserved word
         case treeNode.content.lexema
         when 'if'
             self.onIf treeNode
@@ -98,10 +98,14 @@ class CodeGenerator
     end
 
     def onUntil(treeNode)
+        # El nodo until (que es el último en la expresión Do) tiene la siguiente estructura
+        # until
+        #   exp
+        #       nodoQueIniciaLaExpresion
         self.genCode treeNode.last_child.first_child.first_child
     end
 
-    def constructCondition(treeNode)
+    def constructCondition(treeNode) # Genera el código para la expresión de un if, do o while
         self.genCode treeNode.first_child.first_child
     end
 
@@ -186,7 +190,7 @@ class CodeGenerator
         return @numOfLabels.to_s
     end
 
-    def onSave(command, treeNode)
+    def onSave(command, treeNode) # Hace la concatenación del comando y el valor, puede existir un comando sin valor.
         if treeNode != nil
             codeString = command + ' ' + treeNode.content.lexema
         else
