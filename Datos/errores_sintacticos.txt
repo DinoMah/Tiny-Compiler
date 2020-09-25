@@ -1,0 +1,4 @@
+ERROR EN } línea # 3, se esperaba alguno de los siguientes: 
+-> integer
+-> bool
+-> float

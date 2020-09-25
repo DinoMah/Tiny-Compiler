@@ -62,7 +62,7 @@ class MenuArchivo < FXMainWindow
 			@packer, 
 			:opts => LAYOUT_FILL_X|FRAME_THICK|PACK_UNIFORM_HEIGHT,# LAYOUT_FILL|FRAME_THICK,
 		)
-		@textoYResultados.backColor = "ghostwhite"
+		# @textoYResultados.backColor = "ghostwhite"
 
 		@consoleResults = FXHorizontalFrame.new( @packer, :opts => LAYOUT_FILL_X|FRAME_THICK|PACK_UNIFORM_HEIGHT )
 
@@ -91,7 +91,7 @@ class MenuArchivo < FXMainWindow
 
 		# menuPane = FXMenuPane.new(self)
 		# menuPane2 = FXMenuPane.new(self)
-		buttonTabMenu = FXTabBook.new(@barraDeMenus, :opts => LAYOUT_FILL_X, :height => 40)#|FRAME_GROOVE)
+		buttonTabMenu = FXTabBook.new(@barraDeMenus, :opts => LAYOUT_FILL_X|FRAME_NONE, :height => 40)#|FRAME_GROOVE)
 		buttonTabMenu.backColor = "lavender"
 		initButtonTabMenu(app, buttonTabMenu)
 
@@ -200,41 +200,45 @@ class MenuArchivo < FXMainWindow
 	end
 
 	def initButtonTabMenu(app, buttonTabs)
-		menu = FXTabItem.new(buttonTabs, "Menú")#, :opts => TAB_BOTTOM_NORMAL)
+		menu = FXTabItem.new(buttonTabs, "Menú")
 		menu.font = @defaultFont
-		#menu.backColor = "gainsboro"
-		menuButtonFrame = FXHorizontalFrame.new(buttonTabs, :opts => FRAME_RIDGE)
+		menu.backColor = "lavender"
+		#menu.shadowColor = 'black'
+		menu.baseColor = 'lavender'
+		menuButtonFrame = FXHorizontalFrame.new(buttonTabs, :opts => TAB_TOP_NORMAL)
+		menuButtonFrame.backColor = 'lavender'
+		menuButtonFrame.baseColor = 'lavender'
 		initButtons(app, menuButtonFrame)
-		compiler = FXTabItem.new(buttonTabs, "Compilador")
-		compiler.font = @defaultFont
+		# compiler = FXTabItem.new(buttonTabs, "Compilador")
+		#compiler.font = @defaultFont
 		#compiler.backColor = "gainsboro"
-		compilerButtonFrame = FXHorizontalFrame.new(buttonTabs, :opts => FRAME_RIDGE)
-		initButtons(app, compilerButtonFrame)
+		#compilerButtonFrame = FXHorizontalFrame.new(buttonTabs, :opts => FRAME_RIDGE)
+		#initButtons(app, compilerButtonFrame)
 	end
 
 	def initCompilerResultsItems(compilerResultsTabs)
 		wLexico = FXTabItem.new( compilerResultsTabs, "Léxico" )
 		wLexico.font = @defaultFont
-		wLexico.backColor = "gainsboro"
+		wLexico.backColor = 'lavender'
 		@textoLexico = FXText.new( compilerResultsTabs, :opts => TEXT_READONLY )
 		@textoLexico.text = "Aún no ha realizado un análisis."
 		@textoLexico.font = @defaultFont
 
 		wSintactico = FXTabItem.new( compilerResultsTabs, "Sintáctico" )
 		wSintactico.font = @defaultFont
-		wSintactico.backColor = "gainsboro"
+		wSintactico.backColor = 'lavender'
 		@arbol = FXTreeList.new( compilerResultsTabs, :opts => TREELIST_NORMAL|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|TREELIST_ROOT_BOXES|LAYOUT_FILL )
 		@arbol.font = @defaultFont
 		
 		wSemantico = FXTabItem.new( compilerResultsTabs, "Semántico" )
 		wSemantico.font = @defaultFont
-		wSemantico.backColor = "gainsboro"
+		wSemantico.backColor = 'lavender'
 		@arbolConAnotacion = FXTreeList.new( compilerResultsTabs, :opts => TREELIST_NORMAL|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|TREELIST_ROOT_BOXES|LAYOUT_FILL )
 		@arbolConAnotacion.font = @defaultFont
 
 		wCodigo = FXTabItem.new( compilerResultsTabs, "Código Intermedio" )
 		wCodigo.font = @defaultFont
-		wCodigo.backColor = "gainsboro"
+		wCodigo.backColor = 'lavender'
 		@textoCodigo = FXText.new( compilerResultsTabs, :opts => TEXT_READONLY )
 		@textoCodigo.font = @defaultFont
 	end
@@ -242,7 +246,7 @@ class MenuArchivo < FXMainWindow
 	def initProgramResultsItems(programResultsTab)
 		wErrores = FXTabItem.new( programResultsTab, "Errores" )
 		wErrores.font = @defaultFont
-		wErrores.backColor = "gainsboro"
+		wErrores.backColor = 'lavender'
 		@textoErrores = FXText.new( programResultsTab, :opts => TEXT_READONLY )
 		@textoErrores.text = "Sin errores aún."
 		@textoErrores.font = @defaultFont
@@ -250,7 +254,7 @@ class MenuArchivo < FXMainWindow
 
 		wResultados = FXTabItem.new( programResultsTab, "Salida del programa" )
 		wResultados.font = @defaultFont
-		wResultados.backColor = "gainsboro"
+		wResultados.backColor = 'lavender'
 		@textoResultados = FXText.new(programResultsTab)
 		@textoResultados.editable = false
 		@textoResultados.text = "Sin resultados aún."
@@ -258,7 +262,7 @@ class MenuArchivo < FXMainWindow
 
 		wHash = FXTabItem.new( programResultsTab, "Tabla de símbolos" )
 		wHash.font = @defaultFont
-		wHash.backColor = "gainsboro"
+		wHash.backColor = 'lavender'
 		@tablaSimbolos = initTable( programResultsTab )
 	end
 
@@ -421,6 +425,7 @@ class MenuArchivo < FXMainWindow
 		#Iconos que van a usar los botones
 		iNuevo = FXPNGIcon.new(app, File.open("#{iconsPath}new_button.png", "rb").read )
 		iGuardar = FXPNGIcon.new(app, File.open("#{iconsPath}save_button.png", "rb").read )
+		saveAsIcon = FXPNGIcon.new(app, File.open("#{iconsPath}SaveAsIcon.png").read)
 		iCerrar = FXPNGIcon.new(app, File.open("#{iconsPath}close_button.png", "rb").read )
 		iCompilar = FXPNGIcon.new(app, File.open("#{iconsPath}compile_button.png", "rb").read )
 		iAbrir = FXPNGIcon.new(app, File.open("#{iconsPath}open_button.png", "rb").read )
@@ -454,6 +459,13 @@ class MenuArchivo < FXMainWindow
 			metodoGuardar()
 		end
 
+		saveAsButton = FXButton.new(menuBar, "\tGuardar Como...", :opts => FRAME_LINE|BUTTON_TOOLBAR)
+		saveAsButton.icon = saveAsIcon
+		saveAsButton.backColor = 'lavender'
+		saveAsButton.connect(SEL_COMMAND) do
+			self.metodoGuardarComo
+		end
+
 		bCerrar = FXButton.new(menuBar, "\tCerrar", :opts => FRAME_LINE|BUTTON_TOOLBAR )
 		bCerrar.icon = iCerrar
 		bCerrar.backColor = "lavender"
@@ -468,6 +480,8 @@ class MenuArchivo < FXMainWindow
 			@textArea.disable
 			# @programResultsTabs.backColor = "lavender"
 		end
+
+		FXSeparator.new(menuBar, :opts => SEPARATOR_NONE|LAYOUT_FILL_X)
 
 		bCompilar = FXButton.new(menuBar, "\tCompilar", :opts => FRAME_LINE|BUTTON_TOOLBAR )
 		bCompilar.icon = iCompilar
