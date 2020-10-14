@@ -38,16 +38,21 @@ class AnalizadorSemantico
 
         def crearTablaSimbolos()
             @raiz.postordered_each{ |nodoActual|
+                # Verifica si el padre de la variable es entero, flotante o booleano O si el nodo es es un flotante, entero o booleano
                 if( nodoActual.parent.content.lexema == "integer" || nodoActual.parent.content.lexema == "float" || nodoActual.parent.content.lexema == "bool" || 
                     nodoActual.content.lexema == "integer" || nodoActual.content.lexema == "float" || nodoActual.content.lexema == "bool" )
                     # Va al siguiente si es el padre de las variable (integer, float o bool)
                     if( nodoActual.content.lexema == "integer" || nodoActual.content.lexema == "float" || nodoActual.content.lexema == "bool")
                         next
                     end
-
+                    
+                    # Verifica si la variable no ha sido declarada anteriormente
                     if( @symTab[nodoActual.content.lexema] == "NO_DISPONIBLE")
-                        coincidencias = buscarLineas(nodoActual.content.lexema)
+                        coincidencias = buscarLineas(nodoActual.content.lexema) # Busca todas las coincidencias de la variable en el archivo de código
+                        # Crea el espacio para la variable declarada
+                        # La siguiente línea es innecesaria :v (no la borro por cuestiones de que ya no le quiero mover xD)
                         @symTab[nodoActual.content.lexema] = NodoS.new(nodoActual.content.lexema, nodoActual.parent.content.lexema, 0, @NUM_VARIABLE, coincidencias ) 
+                        # Crea el espacio según su tipo de dato además de que hace una anotacion en el árbol sintactico/semantico
                         if nodoActual.parent.content.lexema == "integer"
                             @symTab[nodoActual.content.lexema] = NodoS.new(nodoActual.content.lexema, nodoActual.parent.content.lexema, 0, @NUM_VARIABLE, coincidencias )
                             nodoActual.content.lexema += " [tipo: " + nodoActual.parent.content.lexema + ", valor: 0]"
@@ -60,15 +65,19 @@ class AnalizadorSemantico
                         end
                         @NUM_VARIABLE += 1
                     else
+                        # Marca error si la variable ha sido declara anteriormente
                         lineaDeError = buscarLinea( nodoActual.parent)
                         @archivoErrores.puts( "ERROR EN LA LÍNEA #{lineaDeError}, la variable " + nodoActual.content.lexema + " ya ha sido declarada"  )
                         nodoActual.content.lexema += " [type: ERROR, valor: ERROR]"
                     end
                 else
+                    # Si el nodo no es una declaracion de variable termina.
                     break
                 end
             }    
         end
+
+        # Las siguientes 2 funciones buscan las coincidencias de la variable en todo el código
 
         def buscarLineas( lexema )
             coincidencias = ""
@@ -114,25 +123,29 @@ class AnalizadorSemantico
             return numLinea
         end
 
+        # Funcion recursiva que recorre por cada hijo del nodo enviado como parámetro
+        # Si ves cosas como esa -> posEspacio = nodoActual.first_child.content.lexema.index(' ') ignoralas, es por cosa de mi interfaz :v, las anotaciones se identifica por que se separan con un espacio
         def recorrerArbol( raiz )
             raiz.children do |nodoActual|
                 if( nodoActual.parent.content.lexema == "integer" || nodoActual.parent.content.lexema == "float" || 
                     nodoActual.parent.content.lexema == "bool" || nodoActual.content.lexema == "integer" || 
                     nodoActual.content.lexema == "float" || nodoActual.content.lexema == "bool" )
+                    # Si es una declaracion de variable no lo haga, por que ya analizamos anteriormente esta parte para crear la tabla de símbolos
                     next
                 else
-                    case nodoActual.content.lexema
+                    case nodoActual.content.lexema # Verifica que tipo de nodo es (:=, if, do, while, read, write)
                     when ":="
                         recorridoPostOrden( nodoActual )
                         begin
                             llave = nil
-                            @symTab.each do |key, entry|
+                            @symTab.each do |key, entry| # Busca la variable en la tabla de simbolos
                                 if nodoActual.first_child.content.lexema.match?(/\b#{key}\b/)
                                     llave = key
                                     break
                                 end
                             end
-                            if(@symTab[llave].tipo == "integer" && nodoActual.last_child.content.tipo == "integer")
+                            # Si el tipo de la variable y el tipo del valor a asignar coinciden se asigna, caso contrario se marca error
+                            if(@symTab[llave].tipo == "integer" && nodoActual.last_child.content.tipo == "integer") # Verifica el ultimo hijo por que tiene dos hijos, la variable a la que va a asignar y lo que le va a asignar
                                 @symTab[llave].valor = nodoActual.last_child.content.valor.to_i
                                 posEspacio = nodoActual.first_child.content.lexema.index(' ')
                                 if posEspacio == nil
@@ -177,6 +190,7 @@ class AnalizadorSemantico
                                 nodoActual.first_child.content.lexema += " [tipo: " + @symTab[llave].tipo + ", valor: ERROR]"
                             end
                         rescue
+                            # Si la variable no esta declarada llega este punto marcando el problema
                             posEspacio = nodoActual.first_child.content.lexema.index(' ')
                             if posEspacio == nil
                                 posEspacio = nodoActual.first_child.content.lexema.length
@@ -184,8 +198,9 @@ class AnalizadorSemantico
                             @archivoErrores.puts("ERROR, la variable #{nodoActual.first_child.content.lexema[0..posEspacio-1]} no está declarada")
                         end
                     when "if"
-                        nodoActual.children do |hijo|
-                            hijo.children do |nieto|
+                        # if tiene 3 hijos o 2 siendo exp, true y false, false siendo opcional (else)
+                        nodoActual.children do |hijo| # Se recorre cada hijo de if
+                            hijo.children do |nieto| # Se recorre cada hijo de exp o true o false
                                 puts nieto.content.lexema
                                 case nieto.content.lexema
                                 when "<", ">", "<=", ">=", "==", "!=", "+", "-", "*", "/", "%"
@@ -205,10 +220,10 @@ class AnalizadorSemantico
                                 end
                             end
                         end
-                    when "while"
+                    when "while" # While tiene n hijos, el primero siendo la expresion a evaluar (2 > 3 por ejemplo) y los demas siendo cada una de las sentencias dentro de el.
                         nodoActual.children do |hijo|
                             puts hijo.content.lexema
-                            if( !@whilehijos )
+                            if( !@whilehijos ) # Evalua la expresion
                                 case hijo.first_child.content.lexema
                                 when "<", ">", "<=", ">=", "==", "!=", "+", "-", "*", "/", "%"
                                     recorridoPostOrden( hijo.first_child )
@@ -218,7 +233,7 @@ class AnalizadorSemantico
                                     end
                                 end
                                 @whilehijos = true
-                            else                       
+                            else # Checa cada sentencia dentro del while
                                 case hijo.content.lexema
                                 when ":="
                                     recorrerArbol( nodoActual )
@@ -236,7 +251,7 @@ class AnalizadorSemantico
                             end
                         end
                         @whilehijos = false
-                    when "do" 
+                    when "do" # do tiene n hijos, siendo el hijo n la expresion, similar al while nada más a la inversa xD
                         nodoActual.children do |hijo|
                             puts hijo.content.lexema
                             if( hijo.content.lexema != "until")
@@ -267,21 +282,22 @@ class AnalizadorSemantico
                             end    
                         end
                     when "read"
-                        recorridoPostOrden( nodoActual ) 
-                    when "write"
+                        recorridoPostOrden( nodoActual ) # Read solo puede tener un hijo
+                    when "write" # Write tiene dos hijos, la cadena y la expresion, esta última se analiza en recorridoPostOrden
                         recorridoPostOrden( nodoActual.last_child)                 
                     end
                 end
             end
         end
 
-        def recorridoPostOrden( nodoActual )
+        # Si cae en cualquiera de los operandos siguientes "<", ">", "<=", ">=", "==", "!=", "+", "-", "*", "/", "%" se analiza aqui
+        def recorridoPostOrden( nodoActual ) # Esta funcion solo se usa para expresiones por ejemplo 3 + 4, 7- 5 y asi
             nodoActual.postordered_each do |nodo|
-                case nodo.content.lexema
+                case nodo.content.lexema # Todas las operaciones aqui son binarias, por lo tanto tienen solo 2 hijos maximo (first_child y last_child) o pueden ser hojas (sin hijos)
                 when "+"
                     begin
-                        nodo.content.valor = nodo.first_child.content.valor + nodo.last_child.content.valor
-                        if nodo.first_child.content.tipo == nodo.last_child.content.tipo
+                        nodo.content.valor = nodo.first_child.content.valor + nodo.last_child.content.valor # Se realiza la operacion
+                        if nodo.first_child.content.tipo == nodo.last_child.content.tipo # Se verifica que los tipos sean correctos
                             nodo.content.tipo = nodo.last_child.content.tipo
                             nodo.content.lexema += " [tipo: "  + nodo.last_child.content.tipo + ", valor: " + nodo.content.valor.to_s + "]"
                         else
@@ -294,6 +310,7 @@ class AnalizadorSemantico
                             end
                         end
                     rescue
+                        # Esto se ejecuta si la operacion no se puede concretar (en la siguientes funciones son similares)
                         posEspacio1 = nodo.first_child.content.lexema.index(' ')
                         if posEspacio1 == nil
                             posEspacio1 = nodo.first_child.content.lexema.length
@@ -372,6 +389,7 @@ class AnalizadorSemantico
                             end
                         end
                     rescue
+                        # Puede que caiga aqui si el divisor es 0
                         posEspacio1 = nodo.first_child.content.lexema.index(' ')
                         if posEspacio1 == nil
                             posEspacio1 = nodo.first_child.content.lexema.length
@@ -409,6 +427,7 @@ class AnalizadorSemantico
                         @archivoErrores.puts("ERROR EN LA OPERACIÓN #{nodo.first_child.content.lexema[0..posEspacio1]} % #{nodo.last_child.content.lexema[0..posEspacio2]}" )
                     end
                 when "<"
+                    # Realiza la comparacion ademas de anotar en el arbol sintactico los resultados
                     if( nodo.first_child.content.valor < nodo.last_child.content.valor )
                         nodo.content.valor = true
                         nodo.content.tipo = "bool"
@@ -469,6 +488,7 @@ class AnalizadorSemantico
                         nodo.content.lexema += " [tipo: " + nodo.content.tipo + ", valor: " + nodo.content.valor.to_s + "]"
                     end
                 else
+                    # Cae aqui si es un numero o un id
                     case nodo.content.token
                     when "num entero"
                         posEspacio = nodo.content.lexema.index(' ')
@@ -476,7 +496,7 @@ class AnalizadorSemantico
                             posEspacio = nodo.content.lexema.length
                         end
                         nodo.content.lexema = nodo.content.lexema[0..posEspacio-1]
-                        nodo.content.valor = nodo.content.lexema.to_i
+                        nodo.content.valor = nodo.content.lexema.to_i # Convierte el string en int
                         nodo.content.tipo = "integer"
                         nodo.content.lexema += " [tipo: " + nodo.content.tipo + ", valor: " + nodo.content.valor.to_s + "]"
                     when "num real"
@@ -494,11 +514,11 @@ class AnalizadorSemantico
                             posEspacio = nodo.content.lexema.length
                         end
                         nodo.content.lexema = nodo.content.lexema[0..posEspacio-1]
-                        if( @symTab[nodo.content.lexema] != "NO_DISPONIBLE" )
+                        if( @symTab[nodo.content.lexema] != "NO_DISPONIBLE" ) # Verifica si la variable esta declarada
                             nodo.content.valor = @symTab[nodo.content.lexema].valor
                             nodo.content.tipo = @symTab[nodo.content.lexema].tipo
                             nodo.content.lexema += " [tipo: " + nodo.content.tipo + ", valor: " + nodo.content.valor.to_s + "]"
-                        else
+                        else # Marca error si la variable no ha sido declarada
                             @archivoErrores.puts( "ERROR EN LA VARIABLE " + nodo.content.lexema + ", la variable no ha sido declarada")
                             nodo.content.lexema += " [tipo: ERROR, valor: ERROR]"
                         end
