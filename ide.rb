@@ -51,15 +51,15 @@ class MenuArchivo < FXMainWindow
 		)
 
 		#Principal packer
-		@packer = FXPacker.new(self, LAYOUT_FILL) 
+		@packer = FXPacker.new(self, LAYOUT_FILL)
 		@packer.backColor = "ghostwhite"
 
 		# Frames
 		@barraDeMenus = FXHorizontalFrame.new( @packer, :opts => LAYOUT_FILL_X|PACK_UNIFORM_HEIGHT|FRAME_NONE )
 		@barraDeMenus.backColor = "ghostwhite"
 
-		@textoYResultados = FXHorizontalFrame.new( 
-			@packer, 
+		@textoYResultados = FXHorizontalFrame.new(
+			@packer,
 			:opts => LAYOUT_FILL_X|FRAME_THICK|PACK_UNIFORM_HEIGHT,# LAYOUT_FILL|FRAME_THICK,
 		)
 		# @textoYResultados.backColor = "ghostwhite"
@@ -70,7 +70,7 @@ class MenuArchivo < FXMainWindow
 		@defaultFont = FXFont.new( app, "Calibri, 90, 0" )
 		@editorFont = FXFont.new(app, "Consolas, 100, 0")
 
-		
+
 		# Container for textArea
 		@areaDelTexto = FXPacker.new(@textoYResultados, :opts => LAYOUT_EXPLICIT, :width => 600, :height => 420)
 		@areaDelTexto.backColor = "lavender"
@@ -98,12 +98,12 @@ class MenuArchivo < FXMainWindow
 		compilerResultsTabs = FXTabBook.new( @textoYResultados, :opts => LAYOUT_EXPLICIT, :width => 590, :height => 420, :x => 600 )
 		compilerResultsTabs.backColor = "lavender"
 		initCompilerResultsItems(compilerResultsTabs)
-		
+
 
 		programResultsTabs = FXTabBook.new( @consoleResults, :opts => LAYOUT_EXPLICIT, :width => 1190, :height => 150 )
 		programResultsTabs.backColor = "lavender"
 		initProgramResultsItems(programResultsTabs)
-		
+
 		@NUM_FILAS = 0 #Must be local for the initTable function
 
 		# archivoMenu = FXMenuTitle.new(menuBar,"Archivo", :popupMenu=>menuPane, :opts => LAYOUT_FILL_Y|FRAME_THICK )
@@ -229,7 +229,7 @@ class MenuArchivo < FXMainWindow
 		wSintactico.backColor = 'lavender'
 		@arbol = FXTreeList.new( compilerResultsTabs, :opts => TREELIST_NORMAL|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|TREELIST_ROOT_BOXES|LAYOUT_FILL )
 		@arbol.font = @defaultFont
-		
+
 		wSemantico = FXTabItem.new( compilerResultsTabs, "Semántico" )
 		wSemantico.font = @defaultFont
 		wSemantico.backColor = 'lavender'
@@ -377,11 +377,11 @@ class MenuArchivo < FXMainWindow
 
 	def metodoGuardar()
 		if @archabierto==true
-      		if @archivonuevo==false
+      if @archivonuevo==false
 				File.open(@ruta_actual,"w") { |f|
 					f.puts @textArea.text
 				}
-		end
+			end
 		elsif @archivonuevo == true
           	archguardar = FXFileDialog.getSaveFilename(self, "Guardar como", ".txt", "*.txt")
 			@ruta_actual = archguardar
@@ -498,13 +498,13 @@ class MenuArchivo < FXMainWindow
 				sintacticAnalyzer = AnalizadorSintactico.new(@ruta_actual)
 				if( !File.zero?("Datos/errores_sintacticos.txt") )
 			      	@textoErrores.text += "\nERRORES SINTÁCTICOS: \n"
-					@textoErrores.text += File.open( "Datos/errores_sintacticos.txt", "r").read 
+					@textoErrores.text += File.open( "Datos/errores_sintacticos.txt", "r").read
 				end
 				crearArbolGrafico( sintacticAnalyzer.getRaiz, @arbol )
 				# #=================================================================================================
-				
+
 				a_c = AnalizadorSemantico.new( sintacticAnalyzer.getRaiz.detached_subtree_copy, @ruta_actual )
-				
+
 				if( !File.zero?("Datos/errores_semanticos.txt") )
 				 	@textoErrores.text += "\nERRORES SEMÁNTICOS: \n"
 					@textoErrores.text += File.open("Datos/errores_semanticos.txt", "r").read
@@ -512,19 +512,23 @@ class MenuArchivo < FXMainWindow
 				crearArbolGrafico( a_c.getRaiz, @arbolConAnotacion )
 				addTableEntries( a_c.getSymTab )
 
-				codeGenerator = CodeGenerator.new sintacticAnalyzer.getRaiz
-				
-				codeGenerator.syntaxTree.children do |treeNode|
-					codeGenerator.genCode treeNode
-				end
-				
-				if !File.zero? 'Datos/assemblies.txt'
-					File.write 'Datos/assemblies.txt', 'stp', mode: 'a'
-					@textoCodigo.text = File.open('Datos/assemblies.txt', 'r').read
-				end
+				if (File.zero?('Datos/errorLexico.txt') && File.zero?('Datos/errores_sintacticos.txt') && File.zero?('Datos/errores_semanticos.txt'))
+					codeGenerator = CodeGenerator.new sintacticAnalyzer.getRaiz
 
-				virtualMachine = VirtualMachine.new a_c.getSymTab, self
-				virtualMachine.init
+					codeGenerator.syntaxTree.children do |treeNode|
+						codeGenerator.genCode treeNode
+					end
+
+					if !File.zero? 'Datos/assemblies.txt'
+						File.write 'Datos/assemblies.txt', 'stp', mode: 'a'
+						@textoCodigo.text = File.open('Datos/assemblies.txt', 'r').read
+					end
+
+					virtualMachine = VirtualMachine.new a_c.getSymTab, self
+					virtualMachine.init
+				else
+					FXMessageBox.warning self, MBOX_OK, 'Warning!', 'Solve every error before trying to run the program (:'
+				end
 			end
 		end
 
@@ -736,7 +740,7 @@ class MenuArchivo < FXMainWindow
 		arbol.clearItems
 		raiz.each{ |nodoActual|
 			actual = FXTreeItem.new( nodoActual.content.lexema, nil, nil, nodoActual.name )
-			if nodoActual.parent == nil 
+			if nodoActual.parent == nil
 				arbol.appendItem( nil, actual )
 			else
 				padre = arbol.findItemByData( nodoActual.parent.name )
